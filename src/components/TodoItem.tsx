@@ -21,7 +21,7 @@ const TodoItem = (props: Props) => {
           className="w-4 h-4"
         />
       </div>
-      <div className="w-full h-full ml-3 overflow-scroll text-sm leading-6">
+      <div className="w-full h-full ml-3 text-sm leading-6">
         <label
           htmlFor={`${todo.id}`}
           className={`font-medium w-full h-full ${todo.completed ? "line-through text-gray-400" : "text-gray-500"}`}
