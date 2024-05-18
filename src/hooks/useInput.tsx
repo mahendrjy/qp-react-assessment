@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-const useInput = () => {
-  const [value, setValue] = useState("");
+const useInput = (defaultValue = "") => {
+  const [value, setValue] = useState(defaultValue);
 
   const onChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

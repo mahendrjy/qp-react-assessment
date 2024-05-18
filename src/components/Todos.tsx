@@ -3,6 +3,7 @@ import { VariableSizeList as List } from "react-window";
 import TodoItem from "./TodoItem";
 import TodoInput from "./TodoInput";
 import useFetch from "../hooks/useFetch";
+import GenerateTodos from "./GenerateTodos";
 
 export interface Todo {
   id: number;
@@ -16,7 +17,7 @@ const Todos = () => {
 
   const addTodo = useCallback(
     (text: string) => {
-      const newTodo = {
+      const newTodo: Todo = {
         id: Date.now(),
         title: text,
         completed: false,
@@ -60,7 +61,7 @@ const Todos = () => {
 
   return (
     <>
-      <div className="space-y-5">
+      <div className="space-y-2">
         <TodoInput addTodo={addTodo} />
         <List
           ref={listRef}
@@ -72,6 +73,7 @@ const Todos = () => {
         >
           {Row}
         </List>
+        <GenerateTodos setTodos={setTodos} />
       </div>
     </>
   );

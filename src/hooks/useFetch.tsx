@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { generateTodos } from "../utils";
 import { Todo } from "../components/Todos";
 
 const useFetch = <T,>(defaultValue: T = null as T) => {
@@ -10,15 +9,12 @@ const useFetch = <T,>(defaultValue: T = null as T) => {
       const response: Response = await fetch(url);
       const data: T = await response.json();
       setData(data);
-    } else {
-      const response: Todo[] = await generateTodos();
-      setData(response);
     }
   }, []);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  });
 
   return { data, setData, fetchData };
 };
