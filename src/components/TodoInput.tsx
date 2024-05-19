@@ -1,4 +1,7 @@
+import React, { useCallback, useMemo } from "react";
 import useInput from "../hooks/useInput";
+import { Button } from "../common/Button";
+import Textarea from "../common/Textarea";
 
 interface Props {
   addTodo: (value: string) => void;
@@ -7,33 +10,32 @@ interface Props {
 const TodoInput = (props: Props) => {
   const { addTodo } = props;
   const { value, setValue, onChange } = useInput();
+  const trimmedValue = useMemo(() => value.trim(), [value]);
 
-  const handleAddTodo = () => {
-    if (value.trim()) {
-      addTodo(value);
+  const handleAddTodo = useCallback(() => {
+    if (trimmedValue) {
+      addTodo(trimmedValue);
       setValue("");
     }
-  };
+  }, [trimmedValue, addTodo, setValue]);
 
   return (
     <div className="space-y-2">
-      <textarea
-        rows={4}
+      <Textarea
         name="add todo"
-        className="block w-full p-2 text-gray-900 border-0 rounded-md shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
         placeholder="Add Todo"
         value={value}
         onChange={onChange}
+        ariaLabel="Input field for adding a new todo"
       />
       <div className="flex justify-end">
-        <button
-          type="button"
-          className="w-32 disabled:bg-gray-400 cursor-pointer rounded-md bg-gray-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
-          disabled={value.trim().length === 0}
+        <Button
+          disabled={trimmedValue.length === 0}
           onClick={handleAddTodo}
+          ariaLabel="Button to add a new todo"
         >
           Add Todo
-        </button>
+        </Button>
       </div>
     </div>
   );

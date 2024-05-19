@@ -17,12 +17,14 @@ const Todos = () => {
 
   const addTodo = useCallback(
     (text: string) => {
-      const newTodo: Todo = {
-        id: Date.now(),
-        title: text,
-        completed: false,
-      };
-      setTodos([...(todos || []), newTodo]);
+      setTodos((prev) => {
+        const newTodo: Todo = {
+          id: Date.now(),
+          title: text,
+          completed: false,
+        };
+        return [...(prev || []), newTodo];
+      });
       if (listRef.current) {
         listRef.current.resetAfterIndex((todos || []).length);
       }
@@ -37,13 +39,16 @@ const Todos = () => {
           todo.id === id ? { ...todo, completed: !todo.completed } : todo,
         ),
       ),
-    [setTodos],
+    [],
   );
 
-  const getItemSize = (index: number) => {
-    const textLength = (todos || [])[index].title.length;
-    return Math.max(50, Math.ceil(textLength / 100) * 50);
-  };
+  const getItemSize = useCallback(
+    (index: number) => {
+      const textLength = (todos || [])[index].title.length;
+      return Math.max(50, Math.ceil(textLength / 100) * 50);
+    },
+    [todos],
+  );
 
   const Row = ({
     index,

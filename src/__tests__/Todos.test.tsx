@@ -14,11 +14,35 @@ describe("Todos", async () => {
     expect(await todos.findByText("New Todo")).not.toBeNull();
   });
 
-  test("toggles todo", async () => {
+  test("toggles a completed todo", async () => {
     const checkbox = await todos.findByRole("checkbox");
     fireEvent.click(checkbox);
     expect(checkbox).toHaveProperty("checked", true);
     fireEvent.click(checkbox);
     expect(checkbox).toHaveProperty("checked", false);
+  });
+
+  test("adds long todo", async () => {
+    fireEvent.input(textarea, {
+      target: {
+        value: "This is a very long todo that exceeds the character limit",
+      },
+    });
+    fireEvent.click(button);
+    expect(
+      await todos.findByText(
+        "This is a very long todo that exceeds the character limit",
+      ),
+    ).not.toBeNull();
+  });
+
+  test("adds a todo with special characters", async () => {
+    fireEvent.input(textarea, {
+      target: { value: "Todo with special characters !@#$%^&*" },
+    });
+    fireEvent.click(button);
+    expect(
+      await todos.findByText("Todo with special characters !@#$%^&*"),
+    ).not.toBeNull();
   });
 });

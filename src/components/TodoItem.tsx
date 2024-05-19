@@ -1,3 +1,5 @@
+import React from "react";
+import classNames from "classnames";
 import { Todo } from "./Todos";
 
 interface Props {
@@ -5,32 +7,42 @@ interface Props {
   toggleTodo: (id: number) => void;
 }
 
-const TodoItem = (props: Props) => {
-  const { todo, toggleTodo } = props;
+interface Props {
+  todo: Todo;
+  toggleTodo: (id: number) => void;
+}
+
+const TodoItem = React.memo(({ todo, toggleTodo }: Props) => {
+  const handleChange = React.useCallback(() => {
+    toggleTodo(todo.id);
+  }, [toggleTodo, todo.id]);
+
+  const labelClassName = classNames("font-medium w-full h-full", {
+    "line-through text-gray-400": todo.completed,
+    "text-gray-500": !todo.completed,
+  });
 
   return (
-    <div className="flex items-start h-full">
+    <li className="flex items-start h-full">
       <div className="flex items-center h-6">
         <input
           id={`${todo.id}`}
           checked={todo.completed}
-          onChange={() => toggleTodo(todo.id)}
+          onChange={handleChange}
           aria-describedby={todo.title}
           name={todo.title}
           type="checkbox"
           className="w-4 h-4"
+          role="checkbox"
         />
       </div>
-      <div className="w-full h-full ml-3 text-sm leading-6">
-        <label
-          htmlFor={`${todo.id}`}
-          className={`font-medium w-full h-full ${todo.completed ? "line-through text-gray-400" : "text-gray-500"}`}
-        >
+      <div className="w-full h-full ml-3 overflow-y-auto text-sm leading-6">
+        <label htmlFor={`${todo.id}`} className={labelClassName}>
           {todo.title}
         </label>
       </div>
-    </div>
+    </li>
   );
-};
+});
 
 export default TodoItem;

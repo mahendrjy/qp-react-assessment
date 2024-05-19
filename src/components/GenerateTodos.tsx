@@ -1,29 +1,36 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Todo } from "./Todos";
 import { generateTodos } from "../utils";
+import { Button } from "../common/Button";
 
 interface Props {
   setTodos: React.Dispatch<React.SetStateAction<Todo[] | null>>;
 }
 
-const GenerateTodos = (props: Props) => {
+const GenerateTodos = React.memo((props: Props) => {
   const { setTodos } = props;
+  const [loading, setLoading] = useState(false);
 
-  const handleAddNTodos = () => {
-    setTodos((prev) => [...(prev || []), ...generateTodos()]);
-  };
+  const handleAddNTodos = useCallback(async () => {
+    setLoading(true);
+    setTimeout(() => {
+      const newTodos = generateTodos();
+      setTodos((prev) => [...(prev || []), ...newTodos]);
+      setLoading(false);
+    }, 200);
+  }, [setTodos]);
 
   return (
     <div className="flex justify-end">
-      <button
-        type="button"
-        className="cursor-pointer rounded-md bg-gray-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+      <Button
         onClick={handleAddNTodos}
+        disabled={loading}
+        ariaLabel="Button to load more todos"
       >
-        Add 10K Todos
-      </button>
+        {loading ? "Loading..." : "Load More Todos"}
+      </Button>
     </div>
   );
-};
+});
 
 export default GenerateTodos;
