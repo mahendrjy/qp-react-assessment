@@ -5,10 +5,11 @@ import GenerateTodos from "../components/GenerateTodos";
 describe("GenerateTodos", async () => {
   const mockSetTodos = vi.fn();
   const generateTodo = render(<GenerateTodos setTodos={mockSetTodos} />);
-  const button = await generateTodo.findByText("Add 10K Todos");
+  const button = await generateTodo.findByText("Load More Todos");
 
-  test("adds 10K todos", async () => {
+  test("adds more todos", async () => {
     fireEvent.click(button);
-    expect(mockSetTodos).toHaveBeenCalled();
+
+    expect(await generateTodo.findByText("Loading...")).toBeTruthy();
   });
 });
